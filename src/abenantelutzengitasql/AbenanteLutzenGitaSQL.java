@@ -14,7 +14,7 @@ public class AbenanteLutzenGitaSQL {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-     
+     GestioneDatabase g=new GestioneDatabase();
     }
     
 }
