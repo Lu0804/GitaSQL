@@ -30,17 +30,16 @@ public class JClasse extends javax.swing.JFrame {
 
         jPnlSfondo = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPnlSfondo.setBackground(new java.awt.Color(102, 174, 33));
         jPnlSfondo.setLayout(null);
@@ -48,50 +47,29 @@ public class JClasse extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(102, 174, 33));
-        jLabel1.setText("ID");
-        jPanel1.add(jLabel1);
-        jLabel1.setBounds(20, 60, 50, 30);
-
         jLabel2.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 174, 33));
         jLabel2.setText("Anno");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(20, 110, 70, 30);
+        jLabel2.setBounds(20, 80, 70, 30);
 
         jLabel3.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(102, 174, 33));
         jLabel3.setText("Sezione");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(20, 170, 100, 30);
+        jLabel3.setBounds(10, 130, 100, 30);
 
         jLabel4.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(102, 174, 33));
         jLabel4.setText("Indirizzo");
         jPanel1.add(jLabel4);
-        jLabel4.setBounds(20, 220, 90, 30);
-
-        jTextField1.setText("jTextField1");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jTextField1);
-        jTextField1.setBounds(130, 70, 71, 22);
-
-        jTextField2.setText("jTextField2");
+        jLabel4.setBounds(10, 180, 90, 30);
         jPanel1.add(jTextField2);
-        jTextField2.setBounds(130, 120, 71, 22);
-
-        jTextField3.setText("jTextField3");
+        jTextField2.setBounds(130, 90, 71, 22);
         jPanel1.add(jTextField3);
-        jTextField3.setBounds(130, 170, 71, 22);
-
-        jTextField4.setText("jTextField4");
+        jTextField3.setBounds(130, 140, 71, 22);
         jPanel1.add(jTextField4);
-        jTextField4.setBounds(130, 230, 71, 22);
+        jTextField4.setBounds(130, 190, 71, 22);
 
         jLabel5.setFont(new java.awt.Font("Yu Gothic UI", 3, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(102, 174, 33));
@@ -106,22 +84,15 @@ public class JClasse extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPnlSfondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPnlSfondo, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPnlSfondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPnlSfondo, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -149,14 +120,12 @@ public class JClasse extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPnlSfondo;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
