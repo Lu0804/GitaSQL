@@ -10,5 +10,7 @@ package abenantelutzengitasql;
  * @author lutzen.jacopo
  */
 public class Classe {
-    
+    private int anno;
+    private char sezione;
+    private String indirizzo;
 }
