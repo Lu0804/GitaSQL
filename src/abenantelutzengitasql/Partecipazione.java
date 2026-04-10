@@ -44,7 +44,7 @@ public class Partecipazione {
 
     /** Controlla se una matricola esiste */
     public boolean esisteIdStudente(int matricola) {
-        return matricole.contains(matricola);
+       return matricole.contains(matricola);
     }
 
     /** Restituisce l'insieme di tutte le matricole */
