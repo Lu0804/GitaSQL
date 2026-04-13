@@ -5,6 +5,7 @@
 package abenantelutzengitasql;
 
 import java.sql.*;
+import java.util.*;
 
 /**
  *
@@ -28,7 +29,7 @@ public class GestioneDatabase {
      * Metodo per creare la tabella delle classi
      * @return true se e' stata creata la tabella, false se non e' riuscito a creare la tabella
      */
-    public boolean creaTabellaClassi() {
+    public final boolean creaTabellaClassi() {
         String sql = "CREATE TABLE IF NOT EXISTS classi (\n"  
            + " cla_id INTEGER PRIMARY KEY AUTOINCREMENT,\n"  
            + " cla_anno INTEGER NOT NULL,\n"           // Es: 3, 4
@@ -53,7 +54,7 @@ public class GestioneDatabase {
      * Metodo per creare la tabella delle gite
      * @return true se e' stata creata la tabella, false se non e' riuscito a creare la tabella
      */
-    public boolean creaTabellaGite() {
+    public final boolean creaTabellaGite() {
         String sql = "CREATE TABLE IF NOT EXISTS gite (\n"  
            + " git_id INTEGER PRIMARY KEY AUTOINCREMENT,\n"  
            + " git_destinazione TEXT NOT NULL,\n"  
@@ -78,7 +79,7 @@ public class GestioneDatabase {
      * Metodo per creare la tabella degli studenti
      * @return true se e' stata creata la tabella, false se non e' riuscito a creare la tabella
      */
-    public boolean creaTabellaStudenti() {
+    public final boolean creaTabellaStudenti() {
         String sql = "CREATE TABLE IF NOT EXISTS studenti (\n"  
            + " stu_id INTEGER PRIMARY KEY AUTOINCREMENT,\n"  
            + " stu_nome TEXT NOT NULL,\n"  
@@ -104,7 +105,7 @@ public class GestioneDatabase {
      * Metodo per creare la tabella delle partecipazioni, lega gita a studente
      * @return true se e' stata creata la tabella, false se non e' riuscito a creare la tabella
      */
-    public boolean creaTabellaPartecipazioni() {
+    public final boolean creaTabellaPartecipazioni() {
         // "tabella ponte" o di congiunzione, perché serve solo a collegare gli studenti alle gite in una relazione "molti-a-molti"
         String sql = "CREATE TABLE IF NOT EXISTS partecipazioni (\n"  
            + " par_stu_id INTEGER NOT NULL,\n"  
@@ -234,4 +235,113 @@ public class GestioneDatabase {
             return false;
         }
     }
+    /**
+     * Cerca tutti gli studenti appartenenti a una specifica classe.
+     * @param idClasse L'ID (cla_id) della classe
+     * @return Una lista di oggetti Studente (vuota se non ci sono studenti o in caso di errore)
+     */
+    public List<Studente> cercaStudentiPerClasse(int idClasse) {
+        List<Studente> listaStudenti = new ArrayList<>();
+        String sql = "SELECT stu_id, stu_nome, stu_cognome FROM studenti WHERE stu_cla_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(url);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idClasse);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("stu_id");
+                String nome = rs.getString("stu_nome");
+                String cognome = rs.getString("stu_cognome");
+                int anno=rs.getInt("stu_anno");
+                
+                
+                // Creiamo l'oggetto Studente e lo aggiungiamo alla Collection
+                listaStudenti.add(new Studente(nome, cognome,id,anno));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Errore durante la ricerca degli studenti per classe: " + e.getMessage());
+        }
+        
+        return listaStudenti;
+    }
+
+    /**
+     * Cerca tutti gli studenti che partecipano a una specifica gita.
+     * @param idGita L'ID (git_id) della gita
+     * @return Una lista di oggetti Studente (vuota se non ci sono iscritti o in caso di errore)
+     */
+    public List<Studente> cercaStudentiPerGita(int idGita) {
+        List<Studente> listaStudenti = new ArrayList<>();
+        String sql = "SELECT s.stu_id, s.stu_nome, s.stu_cognome " +
+                     "FROM studenti s " +
+                     "JOIN partecipazioni p ON s.stu_id = p.par_stu_id " +
+                     "WHERE p.par_git_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(url);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idGita);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("stu_id");
+                String nome = rs.getString("stu_nome");
+                String cognome = rs.getString("stu_cognome");
+                int anno=rs.getInt("stu_anno");
+                
+                
+                // Creiamo l'oggetto Studente e lo aggiungiamo alla Collection
+                listaStudenti.add(new Studente(nome, cognome,id,anno));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Errore durante la ricerca degli studenti per gita: " + e.getMessage());
+        }
+        
+        return listaStudenti;
+    }
+    /**
+     * Cerca tutte le gite a cui è iscritto uno specifico studente, 
+     * restituendo la lista usando la tua classe Gita ufficiale.
+     * @param idStudente L'ID (stu_id) dello studente
+     * @return Una lista di oggetti Gita
+     */
+    public List<Gita> cercaGitePerStudente(int idStudente) {
+        List<Gita> listaGite = new ArrayList<>();
+        
+        // Estraggo solo id, destinazione (che diventerà localita) e durata
+        String sql = "SELECT g.git_id, g.git_destinazione, g.git_durata " +
+                     "FROM gite g " +
+                     "JOIN partecipazioni p ON g.git_id = p.par_git_id " +
+                     "WHERE p.par_stu_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(url);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idStudente);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("git_id");
+                String localita = rs.getString("git_destinazione");
+                
+                // NOTA: Se nel DB avevi salvato la durata come testo (es. "3 giorni"), 
+                // rs.getInt() cercherà di convertirlo e potrebbe dare errore. 
+                // È meglio assicurarsi di salvare la durata sempre e solo come numero intero (es. 3) nel DB.
+                int durata = rs.getInt("git_durata"); 
+                
+                // Uso il tuo costruttore: Gita(int id, String localita, int durata)
+                listaGite.add(new Gita(id, localita, durata));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Errore durante la ricerca delle gite per studente: " + e.getMessage());
+        }
+        
+        return listaGite;
+    }
+    
 }
