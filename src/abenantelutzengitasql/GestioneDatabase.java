@@ -303,5 +303,45 @@ public class GestioneDatabase {
         
         return listaStudenti;
     }
+    /**
+     * Cerca tutte le gite a cui è iscritto uno specifico studente, 
+     * restituendo la lista usando la tua classe Gita ufficiale.
+     * @param idStudente L'ID (stu_id) dello studente
+     * @return Una lista di oggetti Gita
+     */
+    public List<Gita> cercaGitePerStudente(int idStudente) {
+        List<Gita> listaGite = new ArrayList<>();
+        
+        // Estraggo solo id, destinazione (che diventerà localita) e durata
+        String sql = "SELECT g.git_id, g.git_destinazione, g.git_durata " +
+                     "FROM gite g " +
+                     "JOIN partecipazioni p ON g.git_id = p.par_git_id " +
+                     "WHERE p.par_stu_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(url);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idStudente);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("git_id");
+                String localita = rs.getString("git_destinazione");
+                
+                // NOTA: Se nel DB avevi salvato la durata come testo (es. "3 giorni"), 
+                // rs.getInt() cercherà di convertirlo e potrebbe dare errore. 
+                // È meglio assicurarsi di salvare la durata sempre e solo come numero intero (es. 3) nel DB.
+                int durata = rs.getInt("git_durata"); 
+                
+                // Uso il tuo costruttore: Gita(int id, String localita, int durata)
+                listaGite.add(new Gita(id, localita, durata));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Errore durante la ricerca delle gite per studente: " + e.getMessage());
+        }
+        
+        return listaGite;
+    }
     
 }
