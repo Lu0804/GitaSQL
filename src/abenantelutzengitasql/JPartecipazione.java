@@ -32,10 +32,9 @@ public class JPartecipazione extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        btnVisualizzaClasse = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         btnCreaClasse = new javax.swing.JButton();
         btnCreaStudente = new javax.swing.JButton();
-        btnVisualizzaGita = new javax.swing.JButton();
         btnCreaGita = new javax.swing.JButton();
         btnVisualizzaStudente = new javax.swing.JButton();
 
@@ -44,7 +43,7 @@ public class JPartecipazione extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(null);
 
-        jPnlSfondo.setBackground(new java.awt.Color(76, 183, 248));
+        jPnlSfondo.setBackground(new java.awt.Color(135, 197, 234));
         jPnlSfondo.setForeground(new java.awt.Color(0, 126, 249));
         jPnlSfondo.setLayout(null);
 
@@ -68,55 +67,51 @@ public class JPartecipazione extends javax.swing.JFrame {
         jPanel1.add(jScrollPane3);
         jScrollPane3.setBounds(60, 70, 200, 370);
 
+        jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(135, 197, 234));
+        jLabel1.setText("ID dello Studente e delle Gite ");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(40, 30, 260, 25);
+
         jPnlSfondo.add(jPanel1);
-        jPanel1.setBounds(0, 0, 340, 570);
+        jPanel1.setBounds(0, 0, 340, 470);
 
-        btnVisualizzaClasse.setBackground(new java.awt.Color(76, 183, 248));
-        btnVisualizzaClasse.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14)); // NOI18N
-        btnVisualizzaClasse.setForeground(new java.awt.Color(0, 126, 249));
-        btnVisualizzaClasse.setText("Visualizza Classe");
-        btnVisualizzaClasse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVisualizzaClasseActionPerformed(evt);
-            }
-        });
-        jPnlSfondo.add(btnVisualizzaClasse);
-        btnVisualizzaClasse.setBounds(520, 90, 130, 50);
-
-        btnCreaClasse.setBackground(new java.awt.Color(76, 183, 248));
+        btnCreaClasse.setBackground(new java.awt.Color(135, 197, 234));
         btnCreaClasse.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14)); // NOI18N
         btnCreaClasse.setForeground(new java.awt.Color(0, 126, 249));
         btnCreaClasse.setText("Crea Classe");
+        btnCreaClasse.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 126, 249), 2, true));
         jPnlSfondo.add(btnCreaClasse);
-        btnCreaClasse.setBounds(360, 90, 120, 50);
+        btnCreaClasse.setBounds(390, 60, 120, 50);
 
-        btnCreaStudente.setBackground(new java.awt.Color(76, 183, 248));
+        btnCreaStudente.setBackground(new java.awt.Color(135, 197, 234));
         btnCreaStudente.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14)); // NOI18N
         btnCreaStudente.setForeground(new java.awt.Color(0, 126, 249));
         btnCreaStudente.setText("Crea Studente");
+        btnCreaStudente.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 126, 249), 2, true));
         jPnlSfondo.add(btnCreaStudente);
-        btnCreaStudente.setBounds(360, 210, 120, 50);
+        btnCreaStudente.setBounds(390, 160, 120, 50);
 
-        btnVisualizzaGita.setBackground(new java.awt.Color(76, 183, 248));
-        btnVisualizzaGita.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14)); // NOI18N
-        btnVisualizzaGita.setForeground(new java.awt.Color(0, 126, 249));
-        btnVisualizzaGita.setText("Visualizza Gita");
-        jPnlSfondo.add(btnVisualizzaGita);
-        btnVisualizzaGita.setBounds(510, 350, 140, 50);
-
-        btnCreaGita.setBackground(new java.awt.Color(76, 183, 248));
+        btnCreaGita.setBackground(new java.awt.Color(135, 197, 234));
         btnCreaGita.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14)); // NOI18N
         btnCreaGita.setForeground(new java.awt.Color(0, 126, 249));
         btnCreaGita.setText("Crea Gita");
+        btnCreaGita.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 126, 249), 2, true));
         jPnlSfondo.add(btnCreaGita);
-        btnCreaGita.setBounds(360, 350, 120, 50);
+        btnCreaGita.setBounds(390, 260, 120, 50);
 
-        btnVisualizzaStudente.setBackground(new java.awt.Color(76, 183, 248));
+        btnVisualizzaStudente.setBackground(new java.awt.Color(135, 197, 234));
         btnVisualizzaStudente.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14)); // NOI18N
         btnVisualizzaStudente.setForeground(new java.awt.Color(0, 126, 249));
-        btnVisualizzaStudente.setText("Visualizza Studente");
+        btnVisualizzaStudente.setText("Visualizza Tutto");
+        btnVisualizzaStudente.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 126, 249), 2, true));
+        btnVisualizzaStudente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVisualizzaStudenteActionPerformed(evt);
+            }
+        });
         jPnlSfondo.add(btnVisualizzaStudente);
-        btnVisualizzaStudente.setBounds(510, 210, 140, 50);
+        btnVisualizzaStudente.setBounds(380, 370, 140, 50);
 
         getContentPane().add(jPnlSfondo);
         jPnlSfondo.setBounds(-1, -6, 680, 470);
@@ -124,9 +119,9 @@ public class JPartecipazione extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnVisualizzaClasseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisualizzaClasseActionPerformed
+    private void btnVisualizzaStudenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisualizzaStudenteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnVisualizzaClasseActionPerformed
+    }//GEN-LAST:event_btnVisualizzaStudenteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -157,9 +152,8 @@ public class JPartecipazione extends javax.swing.JFrame {
     private javax.swing.JButton btnCreaClasse;
     private javax.swing.JButton btnCreaGita;
     private javax.swing.JButton btnCreaStudente;
-    private javax.swing.JButton btnVisualizzaClasse;
-    private javax.swing.JButton btnVisualizzaGita;
     private javax.swing.JButton btnVisualizzaStudente;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPnlSfondo;
     private javax.swing.JScrollPane jScrollPane3;

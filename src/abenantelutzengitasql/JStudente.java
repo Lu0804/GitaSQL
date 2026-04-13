@@ -37,6 +37,7 @@ public class JStudente extends javax.swing.JFrame {
         txtNome = new javax.swing.JTextField();
         txtCognome = new javax.swing.JTextField();
         cmbClasse = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,11 +47,11 @@ public class JStudente extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 3, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 3, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 153, 0));
         jLabel1.setText("Crea Studente");
         jPanel2.add(jLabel1);
-        jLabel1.setBounds(80, 20, 120, 25);
+        jLabel1.setBounds(30, 20, 170, 32);
 
         jLabel2.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(51, 153, 0));
@@ -80,9 +81,25 @@ public class JStudente extends javax.swing.JFrame {
         jPanel2.add(txtCognome);
         txtCognome.setBounds(120, 140, 64, 22);
 
-        cmbClasse.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbClasse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbClasseActionPerformed(evt);
+            }
+        });
         jPanel2.add(cmbClasse);
         cmbClasse.setBounds(120, 200, 72, 22);
+
+        jButton1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(51, 153, 0));
+        jButton1.setText("Crea");
+        jButton1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(51, 153, 0), 2, true));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton1);
+        jButton1.setBounds(75, 253, 90, 40);
 
         jPanel1.add(jPanel2);
         jPanel2.setBounds(0, 0, 250, 320);
@@ -104,6 +121,14 @@ public class JStudente extends javax.swing.JFrame {
     private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomeActionPerformed
+
+    private void cmbClasseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClasseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbClasseActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -132,6 +157,7 @@ public class JStudente extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbClasse;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

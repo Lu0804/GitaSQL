@@ -28,21 +28,90 @@ public class JGita extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        lblTitolo = new javax.swing.JLabel();
+        lblID = new javax.swing.JLabel();
+        lblDurata = new javax.swing.JLabel();
+        lblLocalita = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        btnCrea = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(66, 174, 203));
+        jPanel1.setLayout(null);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(null);
+
+        lblTitolo.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 24)); // NOI18N
+        lblTitolo.setForeground(new java.awt.Color(66, 174, 203));
+        lblTitolo.setText("Crea una Gita");
+        jPanel2.add(lblTitolo);
+        lblTitolo.setBounds(30, 10, 148, 32);
+
+        lblID.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        lblID.setForeground(new java.awt.Color(66, 174, 203));
+        lblID.setText("ID");
+        jPanel2.add(lblID);
+        lblID.setBounds(20, 90, 20, 25);
+
+        lblDurata.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        lblDurata.setForeground(new java.awt.Color(66, 174, 203));
+        lblDurata.setText("Durata");
+        jPanel2.add(lblDurata);
+        lblDurata.setBounds(10, 150, 55, 25);
+
+        lblLocalita.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        lblLocalita.setForeground(new java.awt.Color(66, 174, 203));
+        lblLocalita.setText("Località");
+        jPanel2.add(lblLocalita);
+        lblLocalita.setBounds(10, 210, 70, 25);
+
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jTextField1);
+        jTextField1.setBounds(110, 90, 71, 22);
+        jPanel2.add(jTextField2);
+        jTextField2.setBounds(110, 150, 64, 22);
+        jPanel2.add(jTextField3);
+        jTextField3.setBounds(110, 210, 64, 22);
+
+        btnCrea.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        btnCrea.setForeground(new java.awt.Color(66, 174, 203));
+        btnCrea.setText("Crea");
+        btnCrea.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(66, 174, 203), 2, true));
+        jPanel2.add(btnCrea);
+        btnCrea.setBounds(60, 270, 80, 40);
+
+        jPanel1.add(jPanel2);
+        jPanel2.setBounds(0, 0, 210, 330);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +139,15 @@ public class JGita extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCrea;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JLabel lblDurata;
+    private javax.swing.JLabel lblID;
+    private javax.swing.JLabel lblLocalita;
+    private javax.swing.JLabel lblTitolo;
     // End of variables declaration//GEN-END:variables
 }

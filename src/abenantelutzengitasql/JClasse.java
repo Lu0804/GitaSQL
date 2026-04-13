@@ -37,6 +37,7 @@ public class JClasse extends javax.swing.JFrame {
         jTextField3 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -76,6 +77,13 @@ public class JClasse extends javax.swing.JFrame {
         jLabel5.setText("Crea una Classe");
         jPanel1.add(jLabel5);
         jLabel5.setBounds(30, 10, 190, 30);
+
+        jButton1.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(102, 174, 33));
+        jButton1.setText("Crea");
+        jButton1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 174, 33), 2, true));
+        jPanel1.add(jButton1);
+        jButton1.setBounds(70, 240, 90, 40);
 
         jPnlSfondo.add(jPanel1);
         jPanel1.setBounds(0, 0, 240, 300);
@@ -120,6 +128,7 @@ public class JClasse extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
