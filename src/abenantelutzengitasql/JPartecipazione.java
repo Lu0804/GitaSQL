@@ -121,6 +121,8 @@ public class JPartecipazione extends javax.swing.JFrame {
 
     private void btnVisualizzaStudenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisualizzaStudenteActionPerformed
         // TODO add your handling code here:
+        
+        java.awt.EventQueue.invokeLater(() -> new JVisualizza().setVisible(true));
     }//GEN-LAST:event_btnVisualizzaStudenteActionPerformed
 
     /**

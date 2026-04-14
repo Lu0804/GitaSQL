@@ -15,6 +15,7 @@ public class AbenanteLutzenGitaSQL {
      */
     public static void main(String[] args) {
      GestioneDatabase g=new GestioneDatabase();
+     java.awt.EventQueue.invokeLater(() -> new JPartecipazione().setVisible(true));
     }
     
 }
