@@ -34,6 +34,9 @@ public class JVisualizza extends javax.swing.JFrame {
         tblStudente = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblGita = new javax.swing.JTable();
+        btnRimuoviGita = new javax.swing.JButton();
+        btnRimuoviClasse = new javax.swing.JButton();
+        btnRimuoviStudente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(770, 540));
@@ -44,7 +47,7 @@ public class JVisualizza extends javax.swing.JFrame {
 
         cmbClasse.addActionListener(this::cmbClasseActionPerformed);
         jPanel1.add(cmbClasse);
-        cmbClasse.setBounds(70, 280, 80, 22);
+        cmbClasse.setBounds(30, 130, 80, 22);
 
         tblStudente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -78,6 +81,19 @@ public class JVisualizza extends javax.swing.JFrame {
         jPanel1.add(jScrollPane2);
         jScrollPane2.setBounds(240, 270, 390, 220);
 
+        btnRimuoviGita.setText("Rimuovi Gita");
+        jPanel1.add(btnRimuoviGita);
+        btnRimuoviGita.setBounds(40, 290, 100, 50);
+
+        btnRimuoviClasse.setText("Rimuovi Classe");
+        btnRimuoviClasse.addActionListener(this::btnRimuoviClasseActionPerformed);
+        jPanel1.add(btnRimuoviClasse);
+        btnRimuoviClasse.setBounds(30, 360, 130, 50);
+
+        btnRimuoviStudente.setText("Rimuovi Studente");
+        jPanel1.add(btnRimuoviStudente);
+        btnRimuoviStudente.setBounds(30, 430, 130, 50);
+
         getContentPane().add(jPanel1);
         jPanel1.setBounds(0, 0, 680, 520);
 
@@ -87,6 +103,10 @@ public class JVisualizza extends javax.swing.JFrame {
     private void cmbClasseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClasseActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbClasseActionPerformed
+
+    private void btnRimuoviClasseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRimuoviClasseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRimuoviClasseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -114,6 +134,9 @@ public class JVisualizza extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRimuoviClasse;
+    private javax.swing.JButton btnRimuoviGita;
+    private javax.swing.JButton btnRimuoviStudente;
     private javax.swing.JComboBox<String> cmbClasse;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
