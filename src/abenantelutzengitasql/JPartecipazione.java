@@ -89,6 +89,11 @@ public class JPartecipazione extends javax.swing.JFrame {
         btnCreaStudente.setForeground(new java.awt.Color(0, 126, 249));
         btnCreaStudente.setText("Crea Studente");
         btnCreaStudente.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 126, 249), 2, true));
+        btnCreaStudente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreaStudenteActionPerformed(evt);
+            }
+        });
         jPnlSfondo.add(btnCreaStudente);
         btnCreaStudente.setBounds(390, 160, 120, 50);
 
@@ -97,6 +102,11 @@ public class JPartecipazione extends javax.swing.JFrame {
         btnCreaGita.setForeground(new java.awt.Color(0, 126, 249));
         btnCreaGita.setText("Crea Gita");
         btnCreaGita.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 126, 249), 2, true));
+        btnCreaGita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreaGitaActionPerformed(evt);
+            }
+        });
         jPnlSfondo.add(btnCreaGita);
         btnCreaGita.setBounds(390, 260, 120, 50);
 
@@ -124,6 +134,18 @@ public class JPartecipazione extends javax.swing.JFrame {
         
         java.awt.EventQueue.invokeLater(() -> new JVisualizza().setVisible(true));
     }//GEN-LAST:event_btnVisualizzaStudenteActionPerformed
+
+    private void btnCreaGitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreaGitaActionPerformed
+        // TODO add your handling code here:
+        
+        java.awt.EventQueue.invokeLater(() -> new JGita().setVisible(true));
+    }//GEN-LAST:event_btnCreaGitaActionPerformed
+
+    private void btnCreaStudenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreaStudenteActionPerformed
+        // TODO add your handling code here:
+        
+        java.awt.EventQueue.invokeLater(() -> new JStudente().setVisible(true));
+    }//GEN-LAST:event_btnCreaStudenteActionPerformed
 
     /**
      * @param args the command line arguments
