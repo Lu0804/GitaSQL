@@ -28,14 +28,23 @@ public class JVisualizza extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        cmbClasse = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblStudente = new javax.swing.JTable();
-        cmbClasse = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblGita = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(770, 540));
         getContentPane().setLayout(null);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(null);
+
+        cmbClasse.addActionListener(this::cmbClasseActionPerformed);
+        jPanel1.add(cmbClasse);
+        cmbClasse.setBounds(70, 280, 80, 22);
 
         tblStudente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -50,12 +59,8 @@ public class JVisualizza extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblStudente);
 
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(130, 10, 505, 220);
-
-        cmbClasse.addActionListener(this::cmbClasseActionPerformed);
-        getContentPane().add(cmbClasse);
-        cmbClasse.setBounds(20, 230, 80, 22);
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(140, 20, 505, 220);
 
         tblGita.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -70,8 +75,11 @@ public class JVisualizza extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tblGita);
 
-        getContentPane().add(jScrollPane2);
+        jPanel1.add(jScrollPane2);
         jScrollPane2.setBounds(240, 270, 390, 220);
+
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(0, 0, 680, 520);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -107,6 +115,7 @@ public class JVisualizza extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbClasse;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblGita;
