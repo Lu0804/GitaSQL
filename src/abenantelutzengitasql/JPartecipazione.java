@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package abenantelutzengitasql;
 
 import javax.swing.*;
@@ -10,34 +6,43 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * Finestra principale dell'applicazione.
- * Crea un'unica istanza di Logica e la passa a tutte le finestre figlie.
- * Mostra la tabella delle partecipazioni (studente → gita).
+ * Finestra principale dell'applicazione per la gestione delle gite scolastiche.
+ * Questa è la prima finestra che viene aperta quando si avvia il programma.
+ * Crea un'unica istanza di Logica che poi viene passata a tutte le finestre figlie,
+ * così tutte usano la stessa connessione al database e gli stessi dati.
+ *
+ * La finestra mostra una tabella con tutte le partecipazioni (studente → gita)
+ * e ha dei pulsanti per aprire le altre finestre e per rimuovere una partecipazione.
+ * Ogni volta che una finestra figlia si chiude, la tabella viene aggiornata
+ * automaticamente con i dati più recenti dal database.
  *
  * @author abenante.lucia
  */
-
 public class JPartecipazione extends javax.swing.JFrame {
 
+    /** Oggetto logica condiviso con tutte le finestre figlie */
     private final Logica logica;
 
     /**
-     * Dati completi della tabella: ogni riga contiene
-     * [matricola, nomeCompleto, idGita, localita]
-     * Le colonne 0 e 2 sono usate solo per la cancellazione (non mostrate).
+     * Copia completa dei dati della tabella partecipazioni, con anche gli ID
+     * che non vengono mostrati all'utente ma servono per l'eliminazione.
+     * Ogni riga è: [matricola (int), nomeCompleto (String), idGita (int), localita (String)]
      */
     private Object[][] partecipazioniDati = new Object[0][4];
 
+    /**
+     * Costruttore della finestra principale.
+     * Crea l'oggetto Logica, inizializza i componenti grafici e carica
+     * la tabella delle partecipazioni dal database.
+     */
     public JPartecipazione() {
         this.logica = new Logica();
         initComponents();
         setLocationRelativeTo(null);
-        
         aggiornaTabella();
     }
 
     @SuppressWarnings("unchecked")
-    
     private void initComponents() {
 
         jPnlSfondo               = new javax.swing.JPanel();
@@ -46,10 +51,10 @@ public class JPartecipazione extends javax.swing.JFrame {
         jScrollPane3             = new javax.swing.JScrollPane();
         jTable2                  = new javax.swing.JTable();
         btnRimuoviPartecipazione = new javax.swing.JButton();
-        btnCreaClasse = new javax.swing.JButton();
-        btnCreaStudente = new javax.swing.JButton();
-        btnCreaGita = new javax.swing.JButton();
-        btnVisualizzaTutto = new javax.swing.JButton();
+        btnCreaClasse            = new javax.swing.JButton();
+        btnCreaStudente          = new javax.swing.JButton();
+        btnCreaGita              = new javax.swing.JButton();
+        btnVisualizzaTutto       = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(700, 660));
@@ -69,7 +74,6 @@ public class JPartecipazione extends javax.swing.JFrame {
         jPanel1.add(jLabel1);
         jLabel1.setBounds(10, 30, 370, 30);
 
-        // Inizializzazione diretta della tabella
         jTable2.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 14));
         jTable2.setModel(new DefaultTableModel(
                 new Object[][]{},
@@ -87,7 +91,6 @@ public class JPartecipazione extends javax.swing.JFrame {
         jPnlSfondo.add(jPanel1);
         jPanel1.setBounds(0, 0, 390, 630);
 
-        // ── Crea Classe ───────────────────────────────────────────────────────
         btnCreaClasse.setBackground(new java.awt.Color(135, 197, 234));
         btnCreaClasse.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14));
         btnCreaClasse.setForeground(new java.awt.Color(0, 126, 249));
@@ -97,7 +100,6 @@ public class JPartecipazione extends javax.swing.JFrame {
         jPnlSfondo.add(btnCreaClasse);
         btnCreaClasse.setBounds(460, 60, 160, 50);
 
-        // ── Crea Studente ─────────────────────────────────────────────────────
         btnCreaStudente.setBackground(new java.awt.Color(135, 197, 234));
         btnCreaStudente.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14));
         btnCreaStudente.setForeground(new java.awt.Color(0, 126, 249));
@@ -107,7 +109,6 @@ public class JPartecipazione extends javax.swing.JFrame {
         jPnlSfondo.add(btnCreaStudente);
         btnCreaStudente.setBounds(460, 160, 160, 50);
 
-        // ── Crea Gita ─────────────────────────────────────────────────────────
         btnCreaGita.setBackground(new java.awt.Color(135, 197, 234));
         btnCreaGita.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14));
         btnCreaGita.setForeground(new java.awt.Color(0, 126, 249));
@@ -117,7 +118,6 @@ public class JPartecipazione extends javax.swing.JFrame {
         jPnlSfondo.add(btnCreaGita);
         btnCreaGita.setBounds(460, 260, 160, 50);
 
-        // ── Visualizza Tutto ──────────────────────────────────────────────────
         btnVisualizzaTutto.setBackground(new java.awt.Color(135, 197, 234));
         btnVisualizzaTutto.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14));
         btnVisualizzaTutto.setForeground(new java.awt.Color(0, 126, 249));
@@ -127,7 +127,6 @@ public class JPartecipazione extends javax.swing.JFrame {
         jPnlSfondo.add(btnVisualizzaTutto);
         btnVisualizzaTutto.setBounds(460, 360, 160, 50);
 
-        // ── Rimuovi Partecipazione (stesso stile degli altri) ─────────────────
         btnRimuoviPartecipazione.setBackground(new java.awt.Color(135, 197, 234));
         btnRimuoviPartecipazione.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14));
         btnRimuoviPartecipazione.setForeground(new java.awt.Color(0, 126, 249));
@@ -144,21 +143,26 @@ public class JPartecipazione extends javax.swing.JFrame {
     }
 
     /**
-     * Ricarica la tabella partecipazioni dal database.
-     * Salva anche i dati completi (con IDs) in partecipazioniDati per la cancellazione.
+     * Ricarica la tabella delle partecipazioni dal database.
+     * Salva anche i dati completi (con gli ID) in partecipazioniDati,
+     * che servono quando l'utente vuole eliminare una riga.
+     * Viene chiamato all'avvio e ogni volta che una finestra figlia viene chiusa.
      */
     public void aggiornaTabella() {
-        // partecipazioniDati[i] = { matricola, nomeCompleto, idGita, localita }
         partecipazioniDati = logica.getPartecipazioniTabellaCompleta();
-
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
         model.setRowCount(0);
         for (Object[] riga : partecipazioniDati) {
-            // Mostra solo colonna 1 (nome studente) e colonna 3 (gita)
             model.addRow(new Object[]{ riga[1], riga[3] });
         }
     }
 
+    /**
+     * Apre la finestra per creare una nuova classe.
+     * Quando la finestra viene chiusa, aggiorna la tabella principale.
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void btnCreaClasseActionPerformed(java.awt.event.ActionEvent evt) {
         JClasse finestra = new JClasse(logica);
         finestra.addWindowListener(new WindowAdapter() {
@@ -167,6 +171,12 @@ public class JPartecipazione extends javax.swing.JFrame {
         finestra.setVisible(true);
     }
 
+    /**
+     * Apre la finestra per creare un nuovo studente.
+     * Quando la finestra viene chiusa, aggiorna la tabella principale.
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void btnCreaStudenteActionPerformed(java.awt.event.ActionEvent evt) {
         JStudente finestra = new JStudente(logica);
         finestra.addWindowListener(new WindowAdapter() {
@@ -175,6 +185,12 @@ public class JPartecipazione extends javax.swing.JFrame {
         finestra.setVisible(true);
     }
 
+    /**
+     * Apre la finestra per creare una nuova gita.
+     * Quando la finestra viene chiusa, aggiorna la tabella principale.
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void btnCreaGitaActionPerformed(java.awt.event.ActionEvent evt) {
         JGita finestra = new JGita(logica);
         finestra.addWindowListener(new WindowAdapter() {
@@ -183,6 +199,14 @@ public class JPartecipazione extends javax.swing.JFrame {
         finestra.setVisible(true);
     }
 
+    /**
+     * Apre la finestra JVisualizza che mostra studenti, gite e permette
+     * di aggiungere o rimuovere partecipazioni, classi, studenti e gite.
+     * Passa anche un Runnable (riferimento a aggiornaTabella) come callback,
+     * così JVisualizza può aggiornare questa tabella anche senza chiudersi.
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void btnVisualizzaTuttoActionPerformed(java.awt.event.ActionEvent evt) {
         JVisualizza finestra = new JVisualizza(logica, this::aggiornaTabella);
         finestra.addWindowListener(new WindowAdapter() {
@@ -191,6 +215,14 @@ public class JPartecipazione extends javax.swing.JFrame {
         finestra.setVisible(true);
     }
 
+    /**
+     * Rimuove la partecipazione selezionata nella tabella.
+     * Prima controlla che l'utente abbia selezionato una riga, poi chiede conferma
+     * con un JOptionPane, e infine chiama il metodo di Logica per l'eliminazione.
+     * Usa partecipazioniDati per recuperare gli ID della riga selezionata.
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void btnRimuoviPartecipazioneActionPerformed(java.awt.event.ActionEvent evt) {
         int riga = jTable2.getSelectedRow();
         if (riga < 0) {
@@ -200,7 +232,6 @@ public class JPartecipazione extends javax.swing.JFrame {
             return;
         }
 
-        // Recupera gli ID dalla copia completa dei dati
         int matricola = (int) partecipazioniDati[riga][0];
         int idGita    = (int) partecipazioniDati[riga][2];
         String nomeStudente = (String) partecipazioniDati[riga][1];

@@ -4,12 +4,26 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
+ * Finestra grafica per la creazione di un nuovo studente.
+ * L'utente inserisce nome e cognome, poi sceglie la classe da una JComboBox
+ * che viene caricata dal database. Infine preme "Crea".
+ * La validazione e il salvataggio vengono gestiti da Logica.
+ * Se l'inserimento va a buon fine la finestra si chiude con dispose().
+ *
  * @author abenante.lucia
  */
 public class JStudente extends javax.swing.JFrame {
 
+    /** Riferimento all'oggetto logica per la comunicazione con il database */
     private Logica logica;
 
+    /**
+     * Costruttore della finestra JStudente.
+     * Riceve l'oggetto Logica, inizializza i componenti grafici e
+     * carica le classi disponibili nella JComboBox.
+     *
+     * @param logica istanza di Logica condivisa con le altre finestre
+     */
     public JStudente(Logica logica) {
         this.logica = logica;
         initComponents();
@@ -17,6 +31,12 @@ public class JStudente extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Carica l'elenco delle classi disponibili nella JComboBox.
+     * Le classi vengono recuperate dal database tramite Logica e inserite
+     * nel modello della combo. La prima voce è sempre "-- Seleziona classe --"
+     * come placeholder, per obbligare l'utente a fare una scelta esplicita.
+     */
     private void caricaClassi() {
         List<String> classi = logica.getElencoClassi();
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
@@ -45,11 +65,9 @@ public class JStudente extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        // Pannello esterno (verde scuro)
         jPanel1.setBackground(new java.awt.Color(51, 153, 0));
         jPanel1.setLayout(null);
 
-        // FIX: jPanel2 (bianco) ora copre tutta la finestra (466 x 315)
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(null);
 
@@ -84,7 +102,7 @@ public class JStudente extends javax.swing.JFrame {
 
         cmbClasse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                // nessuna azione necessaria
+                // nessuna azione necessaria al cambio selezione
             }
         });
         jPanel2.add(cmbClasse);
@@ -102,7 +120,6 @@ public class JStudente extends javax.swing.JFrame {
         jPanel2.add(jButton1);
         jButton1.setBounds(180, 253, 100, 40);
 
-        // FIX: jPanel2 occupa tutta la larghezza di jPanel1 (466 x 315)
         jPanel1.add(jPanel2);
         jPanel2.setBounds(0, 0, 466, 315);
 
@@ -120,6 +137,15 @@ public class JStudente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Gestisce il click sul pulsante "Crea".
+     * Controlla prima che l'utente abbia selezionato una classe valida
+     * (non il placeholder "-- Seleziona classe --"), poi passa i dati a Logica.
+     * Mostra un messaggio di errore se qualcosa va storto,
+     * oppure conferma e chiude la finestra se tutto è ok.
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         String nome    = txtNome.getText();
         String cognome = txtCognome.getText();

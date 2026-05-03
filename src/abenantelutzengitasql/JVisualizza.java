@@ -4,14 +4,42 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
+ * Finestra che mostra tutti i dati del sistema in modo completo.
+ * Contiene due tabelle: una per gli studenti (con filtro per classe)
+ * e una per le gite. Da questa finestra è possibile:
+ * - filtrare gli studenti per classe usando la JComboBox
+ * - aggiungere una o più partecipazioni selezionando studenti e gite con CTRL/SHIFT
+ * - rimuovere una gita (con le sue partecipazioni collegate)
+ * - rimuovere una classe (solo se non ha studenti associati)
+ * - rimuovere uno studente (con le sue partecipazioni collegate)
+ *
+ * La finestra riceve un callback (Runnable) da JPartecipazione: ogni volta che
+ * si aggiunge o rimuove una partecipazione, viene chiamato questo callback
+ * per aggiornare automaticamente la tabella nella finestra principale.
+ *
  * @author abenante.lucia
  */
 public class JVisualizza extends javax.swing.JFrame {
 
+    /** Riferimento all'oggetto logica per tutte le operazioni sul database */
     private final Logica logica;
-    /** Callback chiamato dopo ogni modifica, per aggiornare la tabella in JPartecipazione */
+
+    /**
+     * Callback da eseguire dopo ogni modifica alle partecipazioni.
+     * Punta al metodo aggiornaTabella() di JPartecipazione.
+     * Usiamo Runnable perché è il modo più semplice per passare un riferimento
+     * a un metodo senza creare un'interfaccia apposita.
+     */
     private final Runnable onPartecipazioneAggiunta;
 
+    /**
+     * Costruttore della finestra JVisualizza.
+     * Riceve l'oggetto Logica e il callback, inizializza i componenti
+     * e carica tutti i dati nelle tabelle.
+     *
+     * @param logica                  istanza di Logica condivisa con le altre finestre
+     * @param onPartecipazioneAggiunta callback da chiamare dopo ogni modifica alle partecipazioni
+     */
     public JVisualizza(Logica logica, Runnable onPartecipazioneAggiunta) {
         this.logica = logica;
         this.onPartecipazioneAggiunta = onPartecipazioneAggiunta;
@@ -20,6 +48,10 @@ public class JVisualizza extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Carica tutti i dati nella finestra: riempie la JComboBox delle classi,
+     * la tabella degli studenti (inizialmente con tutti) e la tabella delle gite.
+     */
     private void caricaTutto() {
         DefaultComboBoxModel<String> modelCombo = new DefaultComboBoxModel<>();
         modelCombo.addElement("Tutte le classi");
@@ -31,6 +63,13 @@ public class JVisualizza extends javax.swing.JFrame {
         aggiornaTabellGite();
     }
 
+    /**
+     * Aggiorna la tabella degli studenti.
+     * Se idClasse è -1 vengono mostrati tutti gli studenti,
+     * altrimenti solo quelli della classe specificata.
+     *
+     * @param idClasse ID della classe da filtrare, oppure -1 per mostrare tutti
+     */
     private void aggiornaTabellStudenti(int idClasse) {
         Object[][] dati = (idClasse < 0)
                 ? logica.getTuttiStudentiTabella()
@@ -45,6 +84,10 @@ public class JVisualizza extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Aggiorna la tabella delle gite con i dati più recenti dal database.
+     * Le colonne mostrate sono: ID, Durata (giorni), Località.
+     */
     private void aggiornaTabellGite() {
         Object[][] dati = logica.getGiteTabella();
         tblGita.setModel(new DefaultTableModel(
@@ -78,7 +121,6 @@ public class JVisualizza extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(235, 245, 255));
         jPanel1.setLayout(null);
 
-        // ── Filtro classe ────────────────────────────────────────────────────
         lblClasseFiltro.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 13));
         lblClasseFiltro.setForeground(new java.awt.Color(0, 80, 160));
         lblClasseFiltro.setText("Filtra per classe:");
@@ -89,21 +131,18 @@ public class JVisualizza extends javax.swing.JFrame {
         jPanel1.add(cmbClasse);
         cmbClasse.setBounds(145, 13, 200, 24);
 
-        // ── Tabella studenti (multi-selezione con CTRL/SHIFT) ────────────────
         tblStudente.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 13));
         tblStudente.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane1.setViewportView(tblStudente);
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(150, 50, 505, 220);
 
-        // ── Tabella gite (multi-selezione con CTRL/SHIFT) ────────────────────
         tblGita.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 13));
         tblGita.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane2.setViewportView(tblGita);
         jPanel1.add(jScrollPane2);
         jScrollPane2.setBounds(250, 295, 405, 210);
 
-        // ── Aggiungi Partecipazione (NUOVO) ──────────────────────────────────
         btnAggiungiPartecipazione.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 13));
         btnAggiungiPartecipazione.setForeground(new java.awt.Color(0, 120, 0));
         btnAggiungiPartecipazione.setBackground(new java.awt.Color(220, 255, 220));
@@ -111,9 +150,8 @@ public class JVisualizza extends javax.swing.JFrame {
         btnAggiungiPartecipazione.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 120, 0), 2, true));
         btnAggiungiPartecipazione.addActionListener(this::btnAggiungiPartecipazioneActionPerformed);
         jPanel1.add(btnAggiungiPartecipazione);
-        btnAggiungiPartecipazione.setBounds(30, 160, 110, 55);  // colonna sinistra, sopra i rimuovi
+        btnAggiungiPartecipazione.setBounds(30, 160, 110, 55);
 
-        // ── Pulsanti rimozione (posizioni originali) ─────────────────────────
         btnRimuoviGita.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 13));
         btnRimuoviGita.setForeground(new java.awt.Color(200, 0, 0));
         btnRimuoviGita.setText("Rimuovi Gita");
@@ -141,8 +179,15 @@ public class JVisualizza extends javax.swing.JFrame {
         pack();
     }
 
-    // ── AZIONI ───────────────────────────────────────────────────────────────
+    // ── GESTORI DEGLI EVENTI ─────────────────────────────────────────────────
 
+    /**
+     * Gestisce il cambio di selezione nella JComboBox delle classi.
+     * Se viene selezionata "Tutte le classi" mostra tutti gli studenti,
+     * altrimenti filtra per la classe scelta estraendo l'ID dalla stringa formattata.
+     *
+     * @param evt evento della JComboBox (non usato direttamente)
+     */
     private void cmbClasseActionPerformed(java.awt.event.ActionEvent evt) {
         String selezionata = (String) cmbClasse.getSelectedItem();
         if (selezionata == null || selezionata.equals("Tutte le classi")) {
@@ -152,6 +197,16 @@ public class JVisualizza extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Aggiunge le partecipazioni per tutte le combinazioni di studenti e gite selezionati.
+     * L'utente può selezionare più righe con CTRL o SHIFT in entrambe le tabelle.
+     * Vengono tentate tutte le combinazioni, e alla fine viene mostrato un riepilogo
+     * con quante iscrizioni sono andate a buon fine e quante già esistevano o hanno dato errore.
+     * Se almeno una partecipazione è stata aggiunta, viene chiamato il callback
+     * per aggiornare la tabella in JPartecipazione.
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void btnAggiungiPartecipazioneActionPerformed(java.awt.event.ActionEvent evt) {
         int[] righeStudenti = tblStudente.getSelectedRows();
         int[] righeGite     = tblGita.getSelectedRows();
@@ -196,7 +251,6 @@ public class JVisualizza extends javax.swing.JFrame {
             }
         }
 
-        // Aggiorna subito la tabella partecipazioni in JPartecipazione
         if (successi > 0 && onPartecipazioneAggiunta != null) {
             onPartecipazioneAggiunta.run();
         }
@@ -210,6 +264,13 @@ public class JVisualizza extends javax.swing.JFrame {
                 errori == 0 ? "Successo" : "Operazione parziale", tipo);
     }
 
+    /**
+     * Rimuove la gita selezionata nella tabella e tutte le sue partecipazioni.
+     * Chiede conferma prima di procedere perché l'operazione non è reversibile.
+     * Dopo l'eliminazione aggiorna sia la tabella delle gite che quella in JPartecipazione.
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void btnRimuoviGitaActionPerformed(java.awt.event.ActionEvent evt) {
         int riga = tblGita.getSelectedRow();
         if (riga < 0) {
@@ -238,6 +299,15 @@ public class JVisualizza extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Rimuove la classe selezionata nella JComboBox.
+     * L'operazione fallirà se ci sono ancora studenti associati a quella classe,
+     * perché il database blocca l'eliminazione tramite la foreign key.
+     * Chiede conferma prima di procedere.
+     * Se l'eliminazione va a buon fine, ricarica tutto (combo + tabelle).
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void btnRimuoviClasseActionPerformed(java.awt.event.ActionEvent evt) {
         String classeSelezionata = (String) cmbClasse.getSelectedItem();
         if (classeSelezionata == null || classeSelezionata.equals("Tutte le classi")) {
@@ -261,6 +331,13 @@ public class JVisualizza extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Rimuove lo studente selezionato nella tabella studenti e tutte le sue partecipazioni.
+     * Chiede conferma prima di procedere.
+     * Dopo l'eliminazione aggiorna la tabella studenti e quella in JPartecipazione.
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void btnRimuoviStudenteActionPerformed(java.awt.event.ActionEvent evt) {
         int riga = tblStudente.getSelectedRow();
         if (riga < 0) {

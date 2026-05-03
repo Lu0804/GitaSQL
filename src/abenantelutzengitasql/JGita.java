@@ -2,13 +2,27 @@ package abenantelutzengitasql;
 import javax.swing.JOptionPane;
 
 /**
+ * Finestra grafica per la creazione di una nuova gita scolastica.
+ * L'utente inserisce il prezzo, la durata in giorni e la destinazione,
+ * poi preme "Crea". La validazione e il salvataggio vengono gestiti da Logica.
+ * Se l'inserimento va a buon fine la finestra si chiude automaticamente con dispose().
+ *
  * @author abenante.lucia
  */
 public class JGita extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JGita.class.getName());
+    private static final java.util.logging.Logger logger =
+            java.util.logging.Logger.getLogger(JGita.class.getName());
+
+    /** Riferimento all'oggetto logica per la comunicazione con il database */
     private Logica logica;
 
+    /**
+     * Costruttore della finestra JGita.
+     * Riceve l'oggetto Logica dalla finestra principale e inizializza i componenti grafici.
+     *
+     * @param logica istanza di Logica condivisa con le altre finestre
+     */
     public JGita(Logica logica) {
         this.logica = logica;
         initComponents();
@@ -33,11 +47,9 @@ public class JGita extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        // Pannello esterno (colore di sfondo)
         jPanel1.setBackground(new java.awt.Color(66, 174, 203));
         jPanel1.setLayout(null);
 
-        // FIX: jPanel2 (bianco) ora copre tutta la finestra (408 x 330)
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(null);
 
@@ -84,7 +96,6 @@ public class JGita extends javax.swing.JFrame {
         jPanel2.add(btnCrea);
         btnCrea.setBounds(150, 270, 100, 40);
 
-        // FIX: jPanel2 occupa tutta la larghezza di jPanel1 (408 x 330)
         jPanel1.add(jPanel2);
         jPanel2.setBounds(0, 0, 408, 330);
 
@@ -104,6 +115,14 @@ public class JGita extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Gestisce il click sul pulsante "Crea".
+     * Legge i dati dai tre campi di testo e li passa a Logica.
+     * Se ci sono errori di validazione o del database mostra un messaggio di errore,
+     * altrimenti conferma la creazione e chiude la finestra.
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void btnCreaActionPerformed(java.awt.event.ActionEvent evt) {
         String destinazione = txtDestinazione.getText();
         String durata       = txtDurata.getText();

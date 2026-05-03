@@ -2,13 +2,30 @@ package abenantelutzengitasql;
 import javax.swing.JOptionPane;
 
 /**
+ * Finestra grafica per la creazione di una nuova classe scolastica.
+ * L'utente inserisce l'anno, la sezione e l'indirizzo, poi preme "Crea".
+ * I dati vengono validati e salvati nel database tramite l'oggetto Logica.
+ * Se la creazione va a buon fine la finestra si chiude da sola (dispose),
+ * così la finestra principale può aggiornare la tabella.
+ * Abbiamo usato DISPOSE_ON_CLOSE invece di EXIT_ON_CLOSE per non chiudere
+ * tutta l'applicazione quando si chiude solo questa finestra secondaria.
+ *
  * @author abenante.lucia
  */
 public class JClasse extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JClasse.class.getName());
+    private static final java.util.logging.Logger logger =
+            java.util.logging.Logger.getLogger(JClasse.class.getName());
+
+    /** Riferimento all'oggetto logica per la comunicazione con il database */
     private Logica l;
 
+    /**
+     * Costruttore della finestra JClasse.
+     * Riceve l'oggetto Logica dalla finestra principale e inizializza i componenti.
+     *
+     * @param l istanza di Logica condivisa con le altre finestre
+     */
     public JClasse(Logica l) {
         this.l = l;
         initComponents();
@@ -30,7 +47,6 @@ public class JClasse extends javax.swing.JFrame {
         jLabel5    = new javax.swing.JLabel();
         jButton1   = new javax.swing.JButton();
 
-        // FIX: DISPOSE_ON_CLOSE invece di EXIT_ON_CLOSE
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
@@ -100,6 +116,13 @@ public class JClasse extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Gestisce il click sul pulsante "Crea".
+     * Legge i dati dai campi di testo e li passa a Logica per la validazione e il salvataggio.
+     * Se ci sono errori li mostra con un JOptionPane, altrimenti conferma e chiude la finestra.
+     *
+     * @param evt evento del pulsante (non usato direttamente)
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         String anno      = jTextField2.getText();
         String sezione   = jTextField3.getText();
