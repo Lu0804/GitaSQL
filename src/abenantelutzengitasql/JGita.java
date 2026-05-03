@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package abenantelutzengitasql;
-
+import javax.swing.JOptionPane;
 /**
  *
  * @author abenante.lucia
@@ -11,12 +11,14 @@ package abenantelutzengitasql;
 public class JGita extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JGita.class.getName());
-
+		private  Logica logica;
     /**
      * Creates new form JGita
      */
-    public JGita() {
+    public JGita(Logica logica) {
+       this.logica = logica;
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -34,9 +36,9 @@ public class JGita extends javax.swing.JFrame {
         lblID = new javax.swing.JLabel();
         lblDurata = new javax.swing.JLabel();
         lblLocalita = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        txtPrezzo = new javax.swing.JTextField();
+        txtDurata = new javax.swing.JTextField();
+        txtDestinazione = new javax.swing.JTextField();
         btnCrea = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -51,7 +53,7 @@ public class JGita extends javax.swing.JFrame {
         lblTitolo.setForeground(new java.awt.Color(66, 174, 203));
         lblTitolo.setText("Crea una Gita");
         jPanel2.add(lblTitolo);
-        lblTitolo.setBounds(30, 10, 148, 32);
+        lblTitolo.setBounds(30, 10, 150, 32);
 
         lblID.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
         lblID.setForeground(new java.awt.Color(66, 174, 203));
@@ -63,7 +65,7 @@ public class JGita extends javax.swing.JFrame {
         lblDurata.setForeground(new java.awt.Color(66, 174, 203));
         lblDurata.setText("Durata");
         jPanel2.add(lblDurata);
-        lblDurata.setBounds(10, 150, 55, 25);
+        lblDurata.setBounds(10, 150, 70, 25);
 
         lblLocalita.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
         lblLocalita.setForeground(new java.awt.Color(66, 174, 203));
@@ -71,22 +73,27 @@ public class JGita extends javax.swing.JFrame {
         jPanel2.add(lblLocalita);
         lblLocalita.setBounds(10, 210, 70, 25);
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtPrezzo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtPrezzoActionPerformed(evt);
             }
         });
-        jPanel2.add(jTextField1);
-        jTextField1.setBounds(110, 90, 71, 22);
-        jPanel2.add(jTextField2);
-        jTextField2.setBounds(110, 150, 64, 22);
-        jPanel2.add(jTextField3);
-        jTextField3.setBounds(110, 210, 64, 22);
+        jPanel2.add(txtPrezzo);
+        txtPrezzo.setBounds(110, 90, 71, 22);
+        jPanel2.add(txtDurata);
+        txtDurata.setBounds(110, 150, 64, 22);
+        jPanel2.add(txtDestinazione);
+        txtDestinazione.setBounds(110, 210, 64, 22);
 
         btnCrea.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
         btnCrea.setForeground(new java.awt.Color(66, 174, 203));
         btnCrea.setText("Crea");
         btnCrea.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(66, 174, 203), 2, true));
+        btnCrea.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreaActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnCrea);
         btnCrea.setBounds(60, 270, 80, 40);
 
@@ -109,9 +116,25 @@ public class JGita extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtPrezzoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrezzoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtPrezzoActionPerformed
+
+    private void btnCreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreaActionPerformed
+              String destinazione = txtDestinazione.getText();
+        String durata = txtDurata.getText();
+        String prezzo = txtPrezzo.getText();
+ 
+        String errore = logica.creaGita(destinazione, durata, prezzo);
+ 
+        if (!errore.isEmpty()) {
+            JOptionPane.showMessageDialog(this, errore, "Errore", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Gita creata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+        }
+
+    }//GEN-LAST:event_btnCreaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -135,19 +158,19 @@ public class JGita extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JGita().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new JGita(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrea;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel lblDurata;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblLocalita;
     private javax.swing.JLabel lblTitolo;
+    private javax.swing.JTextField txtDestinazione;
+    private javax.swing.JTextField txtDurata;
+    private javax.swing.JTextField txtPrezzo;
     // End of variables declaration//GEN-END:variables
 }

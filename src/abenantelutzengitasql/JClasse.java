@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package abenantelutzengitasql;
-
+import javax.swing.JOptionPane;
 /**
  *
  * @author abenante.lucia
@@ -11,12 +11,14 @@ package abenantelutzengitasql;
 public class JClasse extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JClasse.class.getName());
-
+  private  Logica l;
     /**
      * Creates new form JClasse
      */
-    public JClasse() {
+    public JClasse(Logica l) {
+        this.l = l;
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -82,6 +84,11 @@ public class JClasse extends javax.swing.JFrame {
         jButton1.setForeground(new java.awt.Color(102, 174, 33));
         jButton1.setText("Crea");
         jButton1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 174, 33), 2, true));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1);
         jButton1.setBounds(70, 240, 90, 40);
 
@@ -101,6 +108,23 @@ public class JClasse extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         String anno = jTextField2.getText();
+        String sezione = jTextField3.getText();
+        String indirizzo = jTextField4.getText();
+ 
+        // La Logica usa Controllo internamente e restituisce il messaggio d'errore
+        String errore = l.creaClasse(anno, sezione, indirizzo);
+ 
+        if (!errore.isEmpty()) {
+            // La grafica mostra il messaggio – la logica non sa nulla di JOptionPane
+            JOptionPane.showMessageDialog(this, errore, "Errore", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Classe creata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+            dispose(); // chiude questa finestra
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -124,7 +148,8 @@ public class JClasse extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JClasse().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new JClasse(null
+        ).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

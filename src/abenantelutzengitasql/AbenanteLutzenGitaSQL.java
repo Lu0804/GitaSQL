@@ -5,17 +5,19 @@
 package abenantelutzengitasql;
 
 /**
+ * Punto di ingresso dell'applicazione Gestione Gite.
+ * Avvia solo la finestra principale JPartecipazione,
+ * che crea l'unica istanza di Logica e la condivide con le finestre figlie.
  *
- * @author abenante.lucia
+ * @author abenante.lucia / lutzen.jacopo
  */
 public class AbenanteLutzenGitaSQL {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-     GestioneDatabase g=new GestioneDatabase();
-     java.awt.EventQueue.invokeLater(() -> new JPartecipazione().setVisible(true));
+        // Avvio sull'Event Dispatch Thread (buona pratica Swing)
+        java.awt.EventQueue.invokeLater(() -> {
+            JPartecipazione finestra = new JPartecipazione();
+            finestra.setVisible(true);
+        });
     }
-    
 }

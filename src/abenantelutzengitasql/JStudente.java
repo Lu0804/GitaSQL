@@ -3,22 +3,35 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package abenantelutzengitasql;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+
 
 /**
  *
  * @author abenante.lucia
  */
 public class JStudente extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JStudente.class.getName());
 
-    /**
-     * Creates new form Studente
-     */
-    public JStudente() {
+    // DEVI INSERIRE QUESTA RIGA QUI:
+    private Logica logica; 
+
+    // Costruttore
+    public JStudente(Logica logica) {
+        this.logica = logica;
         initComponents();
+        caricaClassi();
+        setLocationRelativeTo(null);
     }
-
+  private void caricaClassi() {
+        List<String> classi = logica.getElencoClassi();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        model.addElement("-- Seleziona classe --");
+        for (String c : classi) {
+            model.addElement(c);
+        }
+        cmbClasse.setModel(model);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -127,7 +140,25 @@ public class JStudente extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbClasseActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    String nome = txtNome.getText();
+    String cognome = txtCognome.getText();
+    Object classeSelezionata = cmbClasse.getSelectedItem();
+
+    // Controlla se è stato selezionato il placeholder
+    if (classeSelezionata == null || classeSelezionata.toString().startsWith("--")) {
+        System.err.println("Errore: Seleziona una classe valida.");
+        return;
+    }
+
+    String errore = logica.creaStudente(nome, cognome, classeSelezionata.toString());
+
+    if (!errore.isEmpty()) {
+        System.err.println("Errore: " + errore);
+    } else {
+        System.out.println("Studente creato con successo!");
+        dispose(); // Chiude la finestrella
+    }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -146,13 +177,13 @@ public class JStudente extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+      } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JStudente().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new JStudente(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
