@@ -1,20 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package abenantelutzengitasql;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * @author abenante.lucia
+ */
 public class JVisualizza extends javax.swing.JFrame {
 
     private final Logica logica;
+    /** Callback chiamato dopo ogni modifica, per aggiornare la tabella in JPartecipazione */
+    private final Runnable onPartecipazioneAggiunta;
 
-    // Rimossi i modelli globali modelStudenti e modelGite
-
-    public JVisualizza(Logica logica) {
+    public JVisualizza(Logica logica, Runnable onPartecipazioneAggiunta) {
         this.logica = logica;
+        this.onPartecipazioneAggiunta = onPartecipazioneAggiunta;
         initComponents();
         caricaTutto();
         setLocationRelativeTo(null);
@@ -27,8 +27,7 @@ public class JVisualizza extends javax.swing.JFrame {
             modelCombo.addElement(c);
         }
         cmbClasse.setModel(modelCombo);
-
-        aggiornaTabellStudenti(-1); 
+        aggiornaTabellStudenti(-1);
         aggiornaTabellGite();
     }
 
@@ -50,7 +49,7 @@ public class JVisualizza extends javax.swing.JFrame {
         Object[][] dati = logica.getGiteTabella();
         tblGita.setModel(new DefaultTableModel(
                 dati,
-                new String[]{"ID", "Durata (gg)", "Località"}
+                new String[]{"ID", "Durata (gg)", "Localit\u00e0"}
         ) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
@@ -58,19 +57,19 @@ public class JVisualizza extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        cmbClasse = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblStudente = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tblGita = new javax.swing.JTable();
-        btnRimuoviGita = new javax.swing.JButton();
-        btnRimuoviClasse = new javax.swing.JButton();
-        btnRimuoviStudente = new javax.swing.JButton();
-        lblClasseFiltro = new javax.swing.JLabel();
+        jPanel1                   = new javax.swing.JPanel();
+        cmbClasse                 = new javax.swing.JComboBox<>();
+        jScrollPane1              = new javax.swing.JScrollPane();
+        tblStudente               = new javax.swing.JTable();
+        jScrollPane2              = new javax.swing.JScrollPane();
+        tblGita                   = new javax.swing.JTable();
+        btnAggiungiPartecipazione = new javax.swing.JButton();
+        btnRimuoviGita            = new javax.swing.JButton();
+        btnRimuoviClasse          = new javax.swing.JButton();
+        btnRimuoviStudente        = new javax.swing.JButton();
+        lblClasseFiltro           = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(770, 580));
@@ -79,6 +78,7 @@ public class JVisualizza extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(235, 245, 255));
         jPanel1.setLayout(null);
 
+        // ── Filtro classe ────────────────────────────────────────────────────
         lblClasseFiltro.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 13));
         lblClasseFiltro.setForeground(new java.awt.Color(0, 80, 160));
         lblClasseFiltro.setText("Filtra per classe:");
@@ -89,16 +89,31 @@ public class JVisualizza extends javax.swing.JFrame {
         jPanel1.add(cmbClasse);
         cmbClasse.setBounds(145, 13, 200, 24);
 
+        // ── Tabella studenti (multi-selezione con CTRL/SHIFT) ────────────────
         tblStudente.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 13));
+        tblStudente.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane1.setViewportView(tblStudente);
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(150, 50, 505, 220);
 
+        // ── Tabella gite (multi-selezione con CTRL/SHIFT) ────────────────────
         tblGita.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 13));
+        tblGita.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane2.setViewportView(tblGita);
         jPanel1.add(jScrollPane2);
         jScrollPane2.setBounds(250, 295, 405, 210);
 
+        // ── Aggiungi Partecipazione (NUOVO) ──────────────────────────────────
+        btnAggiungiPartecipazione.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 13));
+        btnAggiungiPartecipazione.setForeground(new java.awt.Color(0, 120, 0));
+        btnAggiungiPartecipazione.setBackground(new java.awt.Color(220, 255, 220));
+        btnAggiungiPartecipazione.setText("<html><center>Aggiungi<br>Partecipazione</center></html>");
+        btnAggiungiPartecipazione.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 120, 0), 2, true));
+        btnAggiungiPartecipazione.addActionListener(this::btnAggiungiPartecipazioneActionPerformed);
+        jPanel1.add(btnAggiungiPartecipazione);
+        btnAggiungiPartecipazione.setBounds(30, 160, 110, 55);  // colonna sinistra, sopra i rimuovi
+
+        // ── Pulsanti rimozione (posizioni originali) ─────────────────────────
         btnRimuoviGita.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 13));
         btnRimuoviGita.setForeground(new java.awt.Color(200, 0, 0));
         btnRimuoviGita.setText("Rimuovi Gita");
@@ -124,76 +139,159 @@ public class JVisualizza extends javax.swing.JFrame {
         jPanel1.setBounds(0, 0, 700, 540);
 
         pack();
-    }// </editor-fold>                        
+    }
+
+    // ── AZIONI ───────────────────────────────────────────────────────────────
 
     private void cmbClasseActionPerformed(java.awt.event.ActionEvent evt) {
         String selezionata = (String) cmbClasse.getSelectedItem();
         if (selezionata == null || selezionata.equals("Tutte le classi")) {
             aggiornaTabellStudenti(-1);
         } else {
-            int idClasse = logica.estraiIdDaStringa(selezionata);
-            aggiornaTabellStudenti(idClasse);
+            aggiornaTabellStudenti(logica.estraiIdDaStringa(selezionata));
         }
     }
 
-    private void btnRimuoviGitaActionPerformed(java.awt.event.ActionEvent evt) {
-        int rigaSelezionata = tblGita.getSelectedRow();
-        if (rigaSelezionata < 0) {
-            System.err.println("Nessuna gita selezionata dalla tabella.");
+    private void btnAggiungiPartecipazioneActionPerformed(java.awt.event.ActionEvent evt) {
+        int[] righeStudenti = tblStudente.getSelectedRows();
+        int[] righeGite     = tblGita.getSelectedRows();
+
+        if (righeStudenti.length == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleziona almeno uno studente dalla tabella in alto (CTRL per più righe).",
+                    "Attenzione", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (righeGite.length == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleziona almeno una gita dalla tabella in basso (CTRL per più righe).",
+                    "Attenzione", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Estrae il modello dinamicamente dalla tabella
+        DefaultTableModel modelS = (DefaultTableModel) tblStudente.getModel();
+        DefaultTableModel modelG = (DefaultTableModel) tblGita.getModel();
+
+        int successi = 0;
+        int errori   = 0;
+        StringBuilder messaggiErrore = new StringBuilder();
+
+        for (int rs : righeStudenti) {
+            int matricola       = (int)    modelS.getValueAt(rs, 0);
+            String nomeStudente = modelS.getValueAt(rs, 1) + " " + modelS.getValueAt(rs, 2);
+
+            for (int rg : righeGite) {
+                int idGita      = (int)    modelG.getValueAt(rg, 0);
+                String localita = (String) modelG.getValueAt(rg, 2);
+
+                String errore = logica.creaPartecipazione(matricola, idGita);
+                if (errore.isEmpty()) {
+                    successi++;
+                } else {
+                    errori++;
+                    messaggiErrore.append("• ").append(nomeStudente)
+                                  .append(" \u2192 ").append(localita)
+                                  .append(": gi\u00e0 iscritto o errore DB\n");
+                }
+            }
+        }
+
+        // Aggiorna subito la tabella partecipazioni in JPartecipazione
+        if (successi > 0 && onPartecipazioneAggiunta != null) {
+            onPartecipazioneAggiunta.run();
+        }
+
+        StringBuilder msg = new StringBuilder();
+        if (successi > 0) msg.append(successi).append(" partecipazione/i aggiunta/e con successo.\n");
+        if (errori   > 0) msg.append(errori).append(" gi\u00e0 esistenti o non inserite:\n").append(messaggiErrore);
+
+        int tipo = (errori == 0) ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE;
+        JOptionPane.showMessageDialog(this, msg.toString().trim(),
+                errori == 0 ? "Successo" : "Operazione parziale", tipo);
+    }
+
+    private void btnRimuoviGitaActionPerformed(java.awt.event.ActionEvent evt) {
+        int riga = tblGita.getSelectedRow();
+        if (riga < 0) {
+            JOptionPane.showMessageDialog(this, "Seleziona una gita dalla tabella prima di rimuoverla.",
+                    "Attenzione", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         DefaultTableModel model = (DefaultTableModel) tblGita.getModel();
-        int idGita = (int) model.getValueAt(rigaSelezionata, 0);
+        int    idGita = (int)    model.getValueAt(riga, 0);
+        String dest   = (String) model.getValueAt(riga, 2);
+
+        int scelta = JOptionPane.showConfirmDialog(this,
+                "Sei sicuro di voler eliminare la gita \"" + dest + "\"?\n"
+                + "Verranno rimosse anche tutte le partecipazioni collegate.",
+                "Conferma eliminazione", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (scelta != JOptionPane.YES_OPTION) return;
 
         String errore = logica.eliminaGita(idGita);
         if (!errore.isEmpty()) {
-            System.err.println("Errore eliminazione gita: " + errore);
+            JOptionPane.showMessageDialog(this, errore, "Errore", JOptionPane.ERROR_MESSAGE);
         } else {
-            System.out.println("Successo: Gita eliminata.");
+            JOptionPane.showMessageDialog(this, "Gita \"" + dest + "\" eliminata con successo.",
+                    "Successo", JOptionPane.INFORMATION_MESSAGE);
             aggiornaTabellGite();
+            if (onPartecipazioneAggiunta != null) onPartecipazioneAggiunta.run();
         }
     }
 
     private void btnRimuoviClasseActionPerformed(java.awt.event.ActionEvent evt) {
         String classeSelezionata = (String) cmbClasse.getSelectedItem();
         if (classeSelezionata == null || classeSelezionata.equals("Tutte le classi")) {
-            System.err.println("Seleziona una classe specifica dalla combobox prima di eliminare.");
+            JOptionPane.showMessageDialog(this, "Seleziona una classe specifica dalla combobox prima di eliminarla.",
+                    "Attenzione", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        int scelta = JOptionPane.showConfirmDialog(this,
+                "Sei sicuro di voler eliminare la classe \"" + classeSelezionata + "\"?\n"
+                + "L'operazione fallir\u00e0 se ci sono studenti ancora associati.",
+                "Conferma eliminazione", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (scelta != JOptionPane.YES_OPTION) return;
 
         int idClasse = logica.estraiIdDaStringa(classeSelezionata);
         String errore = logica.eliminaClasse(idClasse);
         if (!errore.isEmpty()) {
-            System.err.println("Errore eliminazione classe: " + errore);
+            JOptionPane.showMessageDialog(this, errore, "Errore", JOptionPane.ERROR_MESSAGE);
         } else {
-            System.out.println("Successo: Classe eliminata.");
+            JOptionPane.showMessageDialog(this, "Classe eliminata con successo.", "Successo", JOptionPane.INFORMATION_MESSAGE);
             caricaTutto();
         }
     }
 
     private void btnRimuoviStudenteActionPerformed(java.awt.event.ActionEvent evt) {
-        int rigaSelezionata = tblStudente.getSelectedRow();
-        if (rigaSelezionata < 0) {
-            System.err.println("Nessuno studente selezionato dalla tabella.");
+        int riga = tblStudente.getSelectedRow();
+        if (riga < 0) {
+            JOptionPane.showMessageDialog(this, "Seleziona uno studente dalla tabella prima di rimuoverlo.",
+                    "Attenzione", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        // Estrae il modello dinamicamente
         DefaultTableModel model = (DefaultTableModel) tblStudente.getModel();
-        int matricola = (int) model.getValueAt(rigaSelezionata, 0);
+        int    matricola = (int)    model.getValueAt(riga, 0);
+        String nome      = (String) model.getValueAt(riga, 1);
+        String cognome   = (String) model.getValueAt(riga, 2);
+
+        int scelta = JOptionPane.showConfirmDialog(this,
+                "Sei sicuro di voler eliminare lo studente " + nome + " " + cognome + "?\n"
+                + "Verranno rimosse anche tutte le sue partecipazioni.",
+                "Conferma eliminazione", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (scelta != JOptionPane.YES_OPTION) return;
 
         String errore = logica.eliminaStudente(matricola);
         if (!errore.isEmpty()) {
-            System.err.println("Errore eliminazione studente: " + errore);
+            JOptionPane.showMessageDialog(this, errore, "Errore", JOptionPane.ERROR_MESSAGE);
         } else {
-            System.out.println("Successo: Studente eliminato.");
+            JOptionPane.showMessageDialog(this, "Studente " + nome + " " + cognome + " eliminato con successo.",
+                    "Successo", JOptionPane.INFORMATION_MESSAGE);
             cmbClasseActionPerformed(null);
+            if (onPartecipazioneAggiunta != null) onPartecipazioneAggiunta.run();
         }
     }
 
-    // Variables declaration - do not modify                     
+    // Variables declaration
+    private javax.swing.JButton btnAggiungiPartecipazione;
     private javax.swing.JButton btnRimuoviClasse;
     private javax.swing.JButton btnRimuoviGita;
     private javax.swing.JButton btnRimuoviStudente;
@@ -204,5 +302,4 @@ public class JVisualizza extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblGita;
     private javax.swing.JTable tblStudente;
-    // End of variables declaration                   
 }

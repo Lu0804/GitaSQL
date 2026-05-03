@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package abenantelutzengitasql;
 
 import java.util.List;
@@ -23,18 +19,12 @@ public class Logica {
         this.controllo = new Controllo();
     }
 
-    // ── GETTER per usare il controllo dalla grafica ──────────────────────────
-
     public Controllo getControllo() {
         return controllo;
     }
 
     // ── CLASSI ───────────────────────────────────────────────────────────────
 
-    /**
-     * Crea una nuova classe nel database.
-     * @return stringa vuota se ok, messaggio d'errore se fallisce
-     */
     public String creaClasse(String annoStr, String sezione, String indirizzo) {
         String errVal = controllo.validaClasse(annoStr, sezione, indirizzo);
         if (!errVal.isEmpty()) return errVal;
@@ -45,16 +35,10 @@ public class Logica {
         return "";
     }
 
-    /**
-     * Restituisce tutte le classi come lista di stringhe leggibili "ID - Anno Sezione Indirizzo".
-     */
     public List<String> getElencoClassi() {
         return db.getElencoClassiFormattate();
     }
 
-    /**
-     * Restituisce l'ID di una classe dalla stringa formattata "ID - ..."
-     */
     public int estraiIdDaStringa(String s) {
         if (s == null || s.isEmpty()) return -1;
         try {
@@ -64,10 +48,6 @@ public class Logica {
         }
     }
 
-    /**
-     * Elimina una classe per ID.
-     * @return stringa vuota se ok, messaggio d'errore se fallisce
-     */
     public String eliminaClasse(int idClasse) {
         boolean ok = db.eliminaClasse(idClasse);
         if (!ok) return "Impossibile eliminare la classe: potrebbe avere studenti associati o non esistere.";
@@ -76,10 +56,6 @@ public class Logica {
 
     // ── GITE ─────────────────────────────────────────────────────────────────
 
-    /**
-     * Crea una nuova gita nel database.
-     * @return stringa vuota se ok, messaggio d'errore se fallisce
-     */
     public String creaGita(String destinazione, String durataStr, String prezzoStr) {
         String errVal = controllo.validaGita(destinazione, durataStr, prezzoStr);
         if (!errVal.isEmpty()) return errVal;
@@ -91,17 +67,10 @@ public class Logica {
         return "";
     }
 
-    /**
-     * Restituisce tutte le gite come lista di stringhe "ID - Destinazione (X giorni) €Y"
-     */
     public List<String> getElencoGite() {
         return db.getElencoGiteFormattate();
     }
 
-    /**
-     * Elimina una gita per ID.
-     * @return stringa vuota se ok, messaggio d'errore se fallisce
-     */
     public String eliminaGita(int idGita) {
         boolean ok = db.eliminaGita(idGita);
         if (!ok) return "Impossibile eliminare la gita: potrebbe avere partecipazioni associate o non esistere.";
@@ -110,11 +79,6 @@ public class Logica {
 
     // ── STUDENTI ─────────────────────────────────────────────────────────────
 
-    /**
-     * Crea un nuovo studente nel database.
-     * @param classeFormattata la stringa dalla combobox "ID - Anno Sezione Indirizzo"
-     * @return stringa vuota se ok, messaggio d'errore se fallisce
-     */
     public String creaStudente(String nome, String cognome, String classeFormattata) {
         String errVal = controllo.validaStudente(nome, cognome, classeFormattata);
         if (!errVal.isEmpty()) return errVal;
@@ -127,10 +91,6 @@ public class Logica {
         return "";
     }
 
-    /**
-     * Elimina uno studente per ID.
-     * @return stringa vuota se ok, messaggio d'errore se fallisce
-     */
     public String eliminaStudente(int idStudente) {
         boolean ok = db.eliminaStudente(idStudente);
         if (!ok) return "Impossibile eliminare lo studente.";
@@ -139,10 +99,6 @@ public class Logica {
 
     // ── PARTECIPAZIONI ───────────────────────────────────────────────────────
 
-    /**
-     * Registra una partecipazione studente-gita.
-     * @return stringa vuota se ok, messaggio d'errore se fallisce
-     */
     public String creaPartecipazione(int idStudente, int idGita) {
         if (idStudente <= 0) return "ID Studente non valido.";
         if (idGita <= 0) return "ID Gita non valido.";
@@ -151,12 +107,17 @@ public class Logica {
         return "";
     }
 
+    /**
+     * Rimuove una partecipazione dato matricola studente e id gita.
+     */
+    public String eliminaPartecipazione(int matricola, int idGita) {
+        boolean ok = db.eliminaPartecipazione(matricola, idGita);
+        if (!ok) return "Impossibile rimuovere la partecipazione.";
+        return "";
+    }
+
     // ── VISUALIZZAZIONE ───────────────────────────────────────────────────────
 
-    /**
-     * Restituisce tutti gli studenti di una classe come matrice per JTable.
-     * Colonne: Matricola | Nome | Cognome | Anno classe
-     */
     public Object[][] getStudentiPerClasseTabella(int idClasse) {
         List<Studente> lista = db.cercaStudentiPerClasse(idClasse);
         Object[][] dati = new Object[lista.size()][4];
@@ -198,6 +159,44 @@ public class Logica {
             dati[i][1] = s.getNome();
             dati[i][2] = s.getCognome();
             dati[i][3] = s.getAnno();
+        }
+        return dati;
+    }
+
+    /**
+     * Restituisce tutte le partecipazioni come matrice per JTable (solo 2 colonne visibili).
+     * Colonne: Studente (nome+cognome) | Gita (destinazione)
+     * Usato dal vecchio codice – preferire getPartecipazioniTabellaCompleta().
+     */
+    public Object[][] getPartecipazioniTabella() {
+        Object[][] completa = getPartecipazioniTabellaCompleta();
+        Object[][] dati = new Object[completa.length][2];
+        for (int i = 0; i < completa.length; i++) {
+            dati[i][0] = completa[i][1]; // nome studente
+            dati[i][1] = completa[i][3]; // localita gita
+        }
+        return dati;
+    }
+
+    /**
+     * Restituisce tutte le partecipazioni con 4 colonne:
+     * [0] matricola (int)  |  [1] nome+cognome (String)
+     * [2] idGita (int)     |  [3] localita (String)
+     *
+     * Le colonne 0 e 2 servono per la cancellazione in JPartecipazione.
+     */
+    public Object[][] getPartecipazioniTabellaCompleta() {
+        List<Object[]> lista = db.getPartecipazioni();
+        Object[][] dati = new Object[lista.size()][4];
+        for (int i = 0; i < lista.size(); i++) {
+            Object[] riga = lista.get(i);
+            // GestioneDatabase.getPartecipazioni() deve restituire:
+            // riga[0] = matricola (int), riga[1] = nome+cognome (String),
+            // riga[2] = idGita (int),    riga[3] = localita (String)
+            dati[i][0] = riga[0]; // matricola
+            dati[i][1] = riga[1]; // nome studente
+            dati[i][2] = riga[2]; // id gita
+            dati[i][3] = riga[3]; // localita
         }
         return dati;
     }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package abenantelutzengitasql;
 
 import java.sql.*;
@@ -16,15 +12,8 @@ public class GestioneDatabase {
 
     private final String url = "jdbc:sqlite:gestione_gite.db?foreign_keys=on";
 
-   public GestioneDatabase() {
-        //
-        eseguiSQL("DROP TABLE IF EXISTS partecipazioni;", "dropPartecipazioni");
-        eseguiSQL("DROP TABLE IF EXISTS studenti;", "dropStudenti");
-        eseguiSQL("DROP TABLE IF EXISTS gite;", "dropGite");
-        eseguiSQL("DROP TABLE IF EXISTS classi;", "dropClassi");
-        // -----------------------------------------------------------------
-
-        // Questo è il tuo codice originale che le ricrea corrette
+    public GestioneDatabase() {
+        // Le tabelle vengono create solo se non esistono già → i dati vengono conservati
         creaTabellaClassi();
         creaTabellaGite();
         creaTabellaStudenti();
@@ -193,12 +182,9 @@ public class GestioneDatabase {
         }
     }
 
-    /**
-     * Elimina uno studente e le sue partecipazioni collegate.
-     */
     public boolean eliminaStudente(int idStudente) {
         String sqlPart = "DELETE FROM partecipazioni WHERE par_stu_id = ?";
-        String sqlStu = "DELETE FROM studenti WHERE stu_id = ?";
+        String sqlStu  = "DELETE FROM studenti WHERE stu_id = ?";
         try (Connection conn = DriverManager.getConnection(url)) {
             conn.setAutoCommit(false);
             try (PreparedStatement p1 = conn.prepareStatement(sqlPart);
@@ -222,9 +208,6 @@ public class GestioneDatabase {
 
     // ── SELECT / QUERY ───────────────────────────────────────────────────────
 
-    /**
-     * Restituisce tutte le classi come stringhe "ID - Anno Sezione Indirizzo"
-     */
     public List<String> getElencoClassiFormattate() {
         List<String> lista = new ArrayList<>();
         String sql = "SELECT cla_id, cla_anno, cla_sezione, cla_indirizzo FROM classi ORDER BY cla_anno, cla_sezione";
@@ -232,8 +215,8 @@ public class GestioneDatabase {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                int id = rs.getInt("cla_id");
-                int anno = rs.getInt("cla_anno");
+                int id    = rs.getInt("cla_id");
+                int anno  = rs.getInt("cla_anno");
                 String sez = rs.getString("cla_sezione");
                 String ind = rs.getString("cla_indirizzo");
                 lista.add(id + " - " + anno + "° " + sez + " " + ind);
@@ -244,9 +227,6 @@ public class GestioneDatabase {
         return lista;
     }
 
-    /**
-     * Restituisce tutte le gite come stringhe "ID - Destinazione (X giorni) €Y"
-     */
     public List<String> getElencoGiteFormattate() {
         List<String> lista = new ArrayList<>();
         String sql = "SELECT git_id, git_destinazione, git_durata, git_prezzo FROM gite ORDER BY git_id";
@@ -254,10 +234,10 @@ public class GestioneDatabase {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                int id = rs.getInt("git_id");
+                int    id   = rs.getInt("git_id");
                 String dest = rs.getString("git_destinazione");
-                String dur = rs.getString("git_durata");
-                int pr = rs.getInt("git_prezzo");
+                String dur  = rs.getString("git_durata");
+                int    pr   = rs.getInt("git_prezzo");
                 lista.add(id + " - " + dest + " (" + dur + " giorni) €" + pr);
             }
         } catch (SQLException e) {
@@ -266,9 +246,6 @@ public class GestioneDatabase {
         return lista;
     }
 
-    /**
-     * Restituisce tutti gli studenti di una classe.
-     */
     public List<Studente> cercaStudentiPerClasse(int idClasse) {
         List<Studente> lista = new ArrayList<>();
         String sql = "SELECT s.stu_id, s.stu_nome, s.stu_cognome, c.cla_anno "
@@ -292,9 +269,6 @@ public class GestioneDatabase {
         return lista;
     }
 
-    /**
-     * Restituisce tutti gli studenti (tutte le classi).
-     */
     public List<Studente> getTuttiGliStudenti() {
         List<Studente> lista = new ArrayList<>();
         String sql = "SELECT s.stu_id, s.stu_nome, s.stu_cognome, c.cla_anno "
@@ -317,9 +291,6 @@ public class GestioneDatabase {
         return lista;
     }
 
-    /**
-     * Restituisce tutte le gite.
-     */
     public List<Gita> getTutteLeGite() {
         List<Gita> lista = new ArrayList<>();
         String sql = "SELECT git_id, git_destinazione, git_durata FROM gite ORDER BY git_id";
@@ -327,7 +298,7 @@ public class GestioneDatabase {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                int id = rs.getInt("git_id");
+                int id  = rs.getInt("git_id");
                 String loc = rs.getString("git_destinazione");
                 int dur = 0;
                 try { dur = Integer.parseInt(rs.getString("git_durata")); } catch (NumberFormatException ignored) {}
@@ -383,5 +354,49 @@ public class GestioneDatabase {
             System.out.println("Errore cercaGitePerStudente: " + e.getMessage());
         }
         return lista;
+    }
+
+    /**
+     * Restituisce tutte le partecipazioni con gli ID per l'eliminazione.
+     */
+    public List<Object[]> getPartecipazioni() {
+        List<Object[]> lista = new ArrayList<>();
+        // Query aggiornata per estrarre 4 campi invece di 2
+        String sql = "SELECT s.stu_id, s.stu_nome || ' ' || s.stu_cognome AS studente, "
+                + "g.git_id, g.git_destinazione AS gita "
+                + "FROM partecipazioni p "
+                + "JOIN studenti s ON p.par_stu_id = s.stu_id "
+                + "JOIN gite g ON p.par_git_id = g.git_id "
+                + "ORDER BY s.stu_cognome, s.stu_nome";
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                // Ora creiamo un array di 4 elementi, così Logica.java non va in crash!
+                lista.add(new Object[]{
+                    rs.getInt("stu_id"),       // riga[0] - Matricola
+                    rs.getString("studente"),  // riga[1] - Nome e Cognome
+                    rs.getInt("git_id"),       // riga[2] - ID Gita
+                    rs.getString("gita")       // riga[3] - Destinazione
+                });
+            }
+        } catch (SQLException e) {
+            System.out.println("Errore getPartecipazioni: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    public boolean eliminaPartecipazione(int idStudente, int idGita) {
+        String sql = "DELETE FROM partecipazioni WHERE par_stu_id = ? AND par_git_id = ?";
+        try (Connection conn = DriverManager.getConnection(url);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, idStudente);
+            pstmt.setInt(2, idGita);
+            int righe = pstmt.executeUpdate();
+            return righe > 0;
+        } catch (SQLException e) {
+            System.out.println("Errore eliminazione partecipazione: " + e.getMessage());
+            return false;
+        }
     }
 }
