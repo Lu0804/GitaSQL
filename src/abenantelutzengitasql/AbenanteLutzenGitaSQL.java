@@ -6,7 +6,6 @@ package abenantelutzengitasql;
  * sull'Event Dispatch Thread (EDT), che è il thread dedicato alla grafica Swing.
  * Usare l'EDT è la pratica corretta con Swing per evitare problemi di concorrenza.
  * Da JPartecipazione poi vengono aperte tutte le altre finestre,
- * che condividono la stessa istanza di Logica.
  *
  * @author abenante.lucia / lutzen.jacopo
  */
